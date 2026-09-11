@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile | Fitness & Health Tracker
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="fw-bold">My Profile</h1>
+    <p class="text-muted">
+        Manage your personal info
+    </p>
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <h5 class="fw-bold mb-3">
+            Account Information
+        </h5>
+
+        <p>
+            <strong>Username:</strong>
+            {{ user.username }}
+        </p>
+
+        <p>
+            <strong>First Name:</strong>
+            {{ user.first_name|default:"Not set" }}
+        </p>
+
+        <p>
+            <strong>Last Name:</strong>
+            {{ user.last_name|default:"Not set" }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ user.email|default:"Not set" }}
+        </p>
+
+        <hr>
+
+        <h5 class="fw-bold mb-3">
+            Fitness Information
+        </h5>
+
+        <p>
+            <strong>Date of Birth:</strong>
+            {{ user.profile.date_of_birth|default:"Not set" }}
+        </p>
+
+        <p>
+            <strong>Height:</strong>
+            {{ user.profile.height|default:"Not set" }}
+        </p>
+
+        <p>
+            <strong>Unit System:</strong>
+            {{ user.profile.get_unit_system_display }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
