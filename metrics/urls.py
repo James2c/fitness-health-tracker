@@ -15,4 +15,17 @@ urlpatterns = [
         views.weight_create,
         name="weight_create",
     ),
+
+    path(
+        "weight/<int:entry_id>/edit/",
+        views.weight_edit,
+        name="weight_edit",
+    ),
+
+    path(
+        "weight/<int:entry_id>/delete/",
+        views.weight_delete,
+        name="weight_delete",
+    ),
+
 ]

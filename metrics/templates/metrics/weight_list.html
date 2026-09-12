@@ -44,6 +44,7 @@ Weight Tracking | Fitness & Health Tracker
                             <th>Date</th>
                             <th>Weight</th>
                             <th>Notes</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
 
@@ -65,6 +66,18 @@ Weight Tracking | Fitness & Health Tracker
 
                                 <td>
                                     {{ entry.notes|default:"—" }}
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a href="{% url 'weight_edit' entry.id %}" class="btn btn-sm btn-outline-primary">
+                                        Edit
+                                    </a>
+
+                                    <a href="{% url 'weight_delete' entry.id %}" class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </a>
+
                                 </td>
 
                             </tr>
