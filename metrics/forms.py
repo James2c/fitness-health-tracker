@@ -35,3 +35,29 @@ class WeightEntryForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.user = None
+
+    def clean_date(self):
+
+        date = self.cleaned_data.get("date")
+
+        if not date or not self.user:
+            return date
+
+        existing_entry = WeightEntry.objects.filter(
+            user=self.user,
+            date=date,
+        ).exclude(
+            pk=self.instance.pk,
+        ).exists()
+
+        if existing_entry:
+            raise forms.ValidationError(
+                "You already have a weight entry for this date."
+            )
+
+        return date

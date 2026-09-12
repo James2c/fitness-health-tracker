@@ -27,6 +27,7 @@ def weight_create(request):
     if request.method == "POST":
 
         form = WeightEntryForm(request.POST)
+        form.user = request.user
 
         if form.is_valid():
 
@@ -64,6 +65,8 @@ def weight_edit(request, entry_id):
             request.POST,
             instance=entry,
         )
+
+        form.user = request.user
 
         if form.is_valid():
             form.save()
