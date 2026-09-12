@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}
+Weight Tracking | Fitness & Health Tracker
+{% endblock %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1 class="fw-bold mb-1">
+            Weight Tracking
+        </h1>
+
+        <p class="text-muted mb-0">
+            Track your weight over time.
+        </p>
+    </div>
+
+    <a
+        href="{% url 'weight_create' %}"
+        class="btn btn-primary"
+    >
+        Add Weight
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        {% if entries %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Weight</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for entry in entries %}
+
+                            <tr>
+
+                                <td>
+                                    {{ entry.date }}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        {{ entry.weight }} kg
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ entry.notes|default:"—" }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <div class="text-center py-5">
+
+                <h5 class="fw-bold">
+                    No weight entries yet
+                </h5>
+
+                <p class="text-muted">
+                    Add your first weight measurement to start
+                    tracking your progress.
+                </p>
+
+                <a
+                    href="{% url 'weight_create' %}"
+                    class="btn btn-primary"
+                >
+                    Add Your First Weight
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+{% endblock %}
