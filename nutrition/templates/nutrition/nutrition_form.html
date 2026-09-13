@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if entry %}Edit Nutrition Entry{% else %}Add Nutrition Entry{% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1>
+            {% if entry %}
+                Edit Nutrition Entry
+            {% else %}
+                Add Nutrition Entry
+            {% endif %}
+        </h1>
+
+        <p class="text-muted">
+            Record the nutritional information for your food.
+        </p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label for="{{ form.date.id_for_label }}" class="form-label">
+                            Date
+                        </label>
+
+                        {{ form.date }}
+
+                        {% if form.date.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.date.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label for="{{ form.food_name.id_for_label }}" class="form-label">
+                            Food Name
+                        </label>
+
+                        {{ form.food_name }}
+
+                        {% if form.food_name.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.food_name.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label for="{{ form.serving_size.id_for_label }}" class="form-label">
+                            Serving Size
+                        </label>
+
+                        {{ form.serving_size }}
+
+                        {% if form.serving_size.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.serving_size.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label for="{{ form.calories.id_for_label }}" class="form-label">
+                            Calories
+                        </label>
+
+                        {{ form.calories }}
+
+                        {% if form.calories.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.calories.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label for="{{ form.protein.id_for_label }}" class="form-label">
+                            Protein (g)
+                        </label>
+
+                        {{ form.protein }}
+
+                        {% if form.protein.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.protein.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label for="{{ form.carbohydrates.id_for_label }}" class="form-label">
+                            Carbohydrates (g)
+                        </label>
+
+                        {{ form.carbohydrates }}
+
+                        {% if form.carbohydrates.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.carbohydrates.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label for="{{ form.fat.id_for_label }}" class="form-label">
+                            Fat (g)
+                        </label>
+
+                        {{ form.fat }}
+
+                        {% if form.fat.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.fat.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-12">
+
+                        <label for="{{ form.notes.id_for_label }}" class="form-label">
+                            Notes
+                        </label>
+
+                        {{ form.notes }}
+
+                        {% if form.notes.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.notes.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <div class="mt-4">
+
+                    <button type="submit" class="btn btn-primary">
+                        {% if entry %}
+                            Save Changes
+                        {% else %}
+                            Add Food
+                        {% endif %}
+                    </button>
+
+                    <a
+                        href="{% url 'nutrition_list' %}"
+                        class="btn btn-secondary ms-2"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}Nutrition{% endblock %}
+
+{% block content %}
+
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="mb-1">Nutrition</h1>
+            <p class="text-muted mb-0">
+                Track your daily food intake.
+            </p>
+        </div>
+
+        <a href="{% url 'nutrition_create' %}" class="btn btn-primary">
+            Add Food
+        </a>
+    </div>
+
+    <!-- Daily Summary Calculation based on localdate -->
+    <div class="mb-4">
+
+        <h4 class="mb-3">Today's Nutrition</h4>
+
+        <div class="card shadow-sm">
+
+            <div class="card-header">
+                <strong>{{ today|date:"M d, Y" }}</strong>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row text-center">
+
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="text-muted small">
+                            Calories
+                        </div>
+
+                        <div class="fs-4 fw-bold">
+                            {{ daily_total.total_calories|default:0 }}
+                            <small class="fs-6 text-muted">kcal</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="text-muted small">
+                            Protein
+                        </div>
+
+                        <div class="fs-4 fw-bold">
+                            {{ daily_total.total_protein|default:0|floatformat:2 }}
+                            <small class="fs-6 text-muted">g</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="text-muted small">
+                            Carbohydrates
+                        </div>
+
+                        <div class="fs-4 fw-bold">
+                            {{ daily_total.total_carbohydrates|default:0|floatformat:2 }}
+                            <small class="fs-6 text-muted">g</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="text-muted small">
+                            Fat
+                        </div>
+
+                        <div class="fs-4 fw-bold">
+                            {{ daily_total.total_fat|default:0|floatformat:2 }}
+                            <small class="fs-6 text-muted">g</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% if today_entries %}
+
+        <div class="mb-4">
+
+            <h4 class="mb-3">Today's Food</h4>
+
+            <div class="card shadow-sm">
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover mb-0 align-middle">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Serving Size</th>
+                                    <th>Calories</th>
+                                    <th>Protein</th>
+                                    <th>Carbs</th>
+                                    <th>Fat</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for entry in today_entries %}
+
+                                    <tr>
+
+                                        <td>
+                                            <strong>{{ entry.food_name }}</strong>
+                                        </td>
+
+                                        <td>
+                                            {{ entry.serving_size|default:"—" }}
+                                        </td>
+
+                                        <td>
+                                            {{ entry.calories }}
+                                        </td>
+
+                                        <td>
+                                            {{ entry.protein }} g
+                                        </td>
+
+                                        <td>
+                                            {{ entry.carbohydrates }} g
+                                        </td>
+
+                                        <td>
+                                            {{ entry.fat }} g
+                                        </td>
+
+                                        <td>
+                                            <a
+                                                href="{% url 'nutrition_edit' entry.id %}"
+                                                class="btn btn-sm btn-outline-primary"
+                                            >
+                                                Edit
+                                            </a>
+
+                                            <a
+                                                href="{% url 'nutrition_delete' entry.id %}"
+                                                class="btn btn-sm btn-outline-danger"
+                                            >
+                                                Delete
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="mb-4">
+
+            <h4 class="mb-3">Today's Food</h4>
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center py-4">
+
+                    <p class="text-muted mb-3">
+                        No food entries recorded today.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    {% if history_entries %}
+
+        <div class="mt-5">
+
+            <h4 class="mb-3">Food History</h4>
+
+            <div class="card shadow-sm">
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover mb-0 align-middle">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Food</th>
+                                    <th>Serving Size</th>
+                                    <th>Calories</th>
+                                    <th>Protein</th>
+                                    <th>Carbs</th>
+                                    <th>Fat</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for entry in history_entries %}
+
+                                    <tr>
+
+                                        <td>
+                                            {{ entry.date|date:"M d, Y" }}
+                                        </td>
+
+                                        <td>
+                                            <strong>{{ entry.food_name }}</strong>
+                                        </td>
+
+                                        <td>
+                                            {{ entry.serving_size|default:"—" }}
+                                        </td>
+
+                                        <td>
+                                            {{ entry.calories }}
+                                        </td>
+
+                                        <td>
+                                            {{ entry.protein }} g
+                                        </td>
+
+                                        <td>
+                                            {{ entry.carbohydrates }} g
+                                        </td>
+
+                                        <td>
+                                            {{ entry.fat }} g
+                                        </td>
+
+                                        <td>
+                                            <a
+                                                href="{% url 'nutrition_edit' entry.id %}"
+                                                class="btn btn-sm btn-outline-primary"
+                                            >
+                                                Edit
+                                            </a>
+
+                                            <a
+                                                href="{% url 'nutrition_delete' entry.id %}"
+                                                class="btn btn-sm btn-outline-danger"
+                                            >
+                                                Delete
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

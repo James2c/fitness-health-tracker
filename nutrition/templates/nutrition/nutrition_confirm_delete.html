@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Nutrition Entry{% endblock %}
+
+{% block content %}
+
+
+<div class="container py-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h1 class="mb-3">Delete Nutrition Entry</h1>
+
+            <p>
+                Are you sure you want to delete
+                <strong>{{ entry.food_name }}</strong>
+                from
+                <strong>{{ entry.date|date:"M d, Y" }}</strong>?
+            </p>
+
+            <p class="text-muted">
+                This action cannot be undone.
+            </p>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-danger">
+                    Delete Entry
+                </button>
+
+                <a
+                    href="{% url 'nutrition_list' %}"
+                    class="btn btn-secondary ms-2"
+                >
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
