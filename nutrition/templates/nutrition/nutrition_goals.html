@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Nutrition Goals{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1 class="mb-1">Nutrition Goals</h1>
+        <p class="text-muted mb-0">
+            Set your daily nutrition targets.
+        </p>
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <strong>Daily Targets</strong>
+        </div>
+
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="{{ form.daily_calories.id_for_label }}"
+                            class="form-label"
+                        >
+                            Daily Calories (kcal)
+                        </label>
+
+                        {{ form.daily_calories }}
+
+                        {% if form.daily_calories.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.daily_calories.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="{{ form.daily_protein.id_for_label }}"
+                            class="form-label"
+                        >
+                            Daily Protein (g)
+                        </label>
+
+                        {{ form.daily_protein }}
+
+                        {% if form.daily_protein.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.daily_protein.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="{{ form.daily_carbohydrates.id_for_label }}"
+                            class="form-label"
+                        >
+                            Daily Carbohydrates (g)
+                        </label>
+
+                        {{ form.daily_carbohydrates }}
+
+                        {% if form.daily_carbohydrates.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.daily_carbohydrates.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label
+                            for="{{ form.daily_fat.id_for_label }}"
+                            class="form-label"
+                        >
+                            Daily Fat (g)
+                        </label>
+
+                        {{ form.daily_fat }}
+
+                        {% if form.daily_fat.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.daily_fat.errors }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex gap-2 mt-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Save Goals
+                    </button>
+
+                    <a
+                        href="{% url 'nutrition_list' %}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

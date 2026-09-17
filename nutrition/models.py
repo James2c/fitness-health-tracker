@@ -63,3 +63,51 @@ class NutritionEntry(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.food_name} - {self.date}"
+
+
+class NutritionGoal(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="nutrition_goal",
+    )
+
+    daily_calories = models.PositiveIntegerField(
+        validators=[
+            MaxValueValidator(10000),
+        ]
+    )
+
+    daily_protein = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(1000),
+        ],
+    )
+
+    daily_carbohydrates = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(1000),
+        ],
+    )
+
+    daily_fat = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(1000),
+        ],
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return f"{self.user.username} - Nutrition Goals"

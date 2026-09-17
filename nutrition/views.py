@@ -2,11 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Sum
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 from datetime import date
+from decimal import Decimal
 
-from .forms import NutritionEntryForm
-from .models import NutritionEntry
+from .forms import NutritionEntryForm, NutritionGoalForm
+from .models import NutritionEntry, NutritionGoal
+
 
 
 @login_required
@@ -30,6 +33,44 @@ def nutrition_list(request):
         )
     )
 
+    nutrition_goal = NutritionGoal.objects.filter(
+        user=request.user
+    ).first()
+
+    goal_percentages = {}
+
+    if nutrition_goal:
+        goal_percentages = {
+            "calories": min(
+                (
+                    Decimal(daily_total["total_calories"] or 0)
+                    / Decimal(nutrition_goal.daily_calories)
+                ) * 100,
+                Decimal("100"),
+            ),
+            "protein": min(
+                (
+                    Decimal(daily_total["total_protein"] or 0)
+                    / nutrition_goal.daily_protein
+                ) * 100,
+                Decimal("100"),
+            ),
+            "carbohydrates": min(
+                (
+                    Decimal(daily_total["total_carbohydrates"] or 0)
+                    / nutrition_goal.daily_carbohydrates
+                ) * 100,
+                Decimal("100"),
+            ),
+            "fat": min(
+                (
+                    Decimal(daily_total["total_fat"] or 0)
+                    / nutrition_goal.daily_fat
+                ) * 100,
+                Decimal("100"),
+            ),
+        }
+
     history_entries = entries.exclude(date=today)
 
     history_date = request.GET.get("history_date")
@@ -45,6 +86,12 @@ def nutrition_list(request):
     else:
         selected_date = None
 
+    paginator = Paginator(history_entries, 10)
+
+    page_number = request.GET.get("page")
+
+    history_entries = paginator.get_page(page_number)
+
     return render(
         request,
         "nutrition/nutrition_list.html",
@@ -53,6 +100,8 @@ def nutrition_list(request):
             "today_entries": today_entries,
             "history_entries": history_entries,
             "daily_total": daily_total,
+            "nutrition_goal": nutrition_goal,
+            "goal_percentages": goal_percentages,
             "today": today,
             "selected_date": selected_date,
         },
@@ -130,4 +179,38 @@ def nutrition_delete(request, entry_id):
         request,
         "nutrition/nutrition_confirm_delete.html",
         {"entry": entry},
+    )
+
+
+@login_required
+def nutrition_goals(request):
+    goal, created = NutritionGoal.objects.get_or_create(
+        user=request.user,
+        defaults={
+            "daily_calories": 2000,
+            "daily_protein": 150,
+            "daily_carbohydrates": 250,
+            "daily_fat": 65,
+        },
+    )
+
+    if request.method == "POST":
+        form = NutritionGoalForm(
+            request.POST,
+            instance=goal,
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect("nutrition_goals")
+
+    else:
+        form = NutritionGoalForm(instance=goal)
+
+    return render(
+        request,
+        "nutrition/nutrition_goals.html",
+        {
+            "form": form,
+        },
     )
